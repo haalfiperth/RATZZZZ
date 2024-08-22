@@ -163,7 +163,6 @@ local Settings = {
     MaxSize = Vector2.new(500, 400)
 }
 
-if getgenv().Nopoint.Loader.Internal then
 local Menu = {}
 local Tabs = {}
 local Items = {}
