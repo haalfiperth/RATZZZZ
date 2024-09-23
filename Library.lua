@@ -2,7 +2,6 @@
 -- Example at bottom
 --
 
-function LoadScript()
 local Library = {};
 do
 	Library = {
