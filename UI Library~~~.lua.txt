@@ -858,6 +858,153 @@ function Menu.TextBox(Tab_Name: string, Container_Name: string, Name: string, Va
     return #Items
 end
 
+local TweenService = game:GetService("TweenService")
+
+function Menu.BodyPart(Tab_Name: string, Container_Name: string, Side: string, Callback: any): BodyPart
+    local Tab = GetTab(Tab_Name)
+    assert(typeof(Tab_Name) == "string", "TAB_NAME REQUIRED")
+    if Tab[Container_Name] then return error("CONTAINER_NAME '" .. tostring(Container_Name) .. "' ALREADY EXISTS") end
+    local Side = Side or "Left"
+
+    local Frame = Instance.new("Frame")
+    local Label = CreateLabel(Frame, "Title", Container_Name, UDim2.fromOffset(206, 15), UDim2.fromOffset(5, 0))
+    local Line = CreateLine(Frame, UDim2.new(1, -10, 0, 1), UDim2.fromOffset(5, 15))
+
+    local BodyPart = {self = Frame, Height = 0}
+    BodyPart.Class = "BodyPart"
+    BodyPart.Visible = true
+    BodyPart.Callback = typeof(Callback) == "function" and Callback or function() end
+
+    function BodyPart:SetLabel(Name: string)
+        Label.Text = tostring(Name)
+    end
+
+    function BodyPart:SetVisible(Visible: boolean)
+        if typeof(Visible) ~= "boolean" then return end
+        if self.Visible == Visible then return end
+        
+        Frame.Visible = Visible
+        self.Visible = Visible
+        self:UpdateSize(Visible and 25 or -25, Frame)
+    end
+
+    function BodyPart:UpdateSize(Height: float, Item: GuiObject)
+        self.Height += Height
+        Frame.Size += UDim2.fromOffset(0, Height)
+        Tab.self[Side].CanvasSize += UDim2.fromOffset(0, Height)
+
+        if Item then
+            local ItemY = Item.AbsolutePosition.Y
+            if math.sign(Height) == 1 then
+                ItemY -= 1
+            end
+
+            for _, item in ipairs(Frame:GetChildren()) do
+                if (item == Label or item == Line or item == Stroke or Item == item) then continue end
+                local item_y = item.AbsolutePosition.Y
+                if item_y > ItemY then
+                    item.Position += UDim2.fromOffset(0, Height)
+                end
+            end
+        end
+    end
+
+    function BodyPart:GetHeight(): number
+        return self.Height
+    end
+
+    Frame.Name = "BodyPart"
+    Frame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+    Frame.BorderColor3 = Color3.new()
+    Frame.BorderMode = Enum.BorderMode.Inset
+    Frame.Size = UDim2.new(0, 190, 0, 180)
+    Frame.Parent = Tab.self[Side]
+
+    BodyPart:UpdateSize(25)
+    Tab.self[Side].CanvasSize += UDim2.fromOffset(0, 10)
+    Tab[Container_Name] = BodyPart
+
+    local function iQerX9Vxz(TrfkJ2zX)
+        local BodyPartFrame = Instance.new("Frame")
+        BodyPartFrame.Name = TrfkJ2zX
+        BodyPartFrame.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
+        BodyPartFrame.BorderSizePixel = 1
+        BodyPartFrame.BorderColor3 = Color3.fromRGB(0, 0, 0)
+        BodyPartFrame.Parent = Frame
+
+        if TrfkJ2zX == "Head" then
+            BodyPartFrame.Size = UDim2.new(0, 30, 0, 30)
+            BodyPartFrame.Position = UDim2.new(0.5, -15, 0, 10)
+        elseif TrfkJ2zX == "UpperTorso" then
+            BodyPartFrame.Size = UDim2.new(0, 50, 0, 35)
+            BodyPartFrame.Position = UDim2.new(0.5, -25, 0, 40)
+        elseif TrfkJ2zX == "LowerTorso" then
+            BodyPartFrame.Size = UDim2.new(0, 50, 0, 35)
+            BodyPartFrame.Position = UDim2.new(0.5, -25, 0, 75)
+        elseif TrfkJ2zX == "HumanoidRootPart" then
+            BodyPartFrame.Size = UDim2.new(0, 20, 0, 20)
+            BodyPartFrame.Position = UDim2.new(0.5, -7, 0.5, -35)
+
+        elseif TrfkJ2zX == "UpperLeftArm" then
+            BodyPartFrame.Size = UDim2.new(0, 20, 0, 35)
+            BodyPartFrame.Position = UDim2.new(0.5, -40, 0, 40)
+        elseif TrfkJ2zX == "LowerLeftArm" then
+            BodyPartFrame.Size = UDim2.new(0, 20, 0, 35)
+            BodyPartFrame.Position = UDim2.new(0.5, -40, 0, 75)
+        elseif TrfkJ2zX == "UpperRightArm" then
+            BodyPartFrame.Size = UDim2.new(0, 20, 0, 35)
+            BodyPartFrame.Position = UDim2.new(0.5, 25, 0, 40)
+        elseif TrfkJ2zX == "LowerRightArm" then
+            BodyPartFrame.Size = UDim2.new(0, 20, 0, 35)
+            BodyPartFrame.Position = UDim2.new(0.5, 25, 0, 75)
+
+        elseif TrfkJ2zX == "UpperLeftLeg" then
+            BodyPartFrame.Size = UDim2.new(0, 23, 0, 35)
+            BodyPartFrame.Position = UDim2.new(0.5, -22.5, 0, 110)
+        elseif TrfkJ2zX == "LowerLeftLeg" then
+            BodyPartFrame.Size = UDim2.new(0, 23, 0, 35)
+            BodyPartFrame.Position = UDim2.new(0.5, -22.5, 0, 145)
+        elseif TrfkJ2zX == "UpperRightLeg" then
+            BodyPartFrame.Size = UDim2.new(0, 23, 0, 35)
+            BodyPartFrame.Position = UDim2.new(0.5, 2.5, 0, 110)
+        elseif TrfkJ2zX == "LowerRightLeg" then
+            BodyPartFrame.Size = UDim2.new(0, 23, 0, 35)
+            BodyPartFrame.Position = UDim2.new(0.5, 2.5, 0, 145)
+        end
+
+        local Button = Instance.new("TextButton")
+        Button.Size = UDim2.new(1, 0, 1, 0)
+        Button.Position = UDim2.new(0, 0, 0, 0)
+        Button.BackgroundTransparency = 1
+        Button.Text = ""
+        Button.Parent = BodyPartFrame
+
+        Button.MouseButton1Click:Connect(function()
+            
+            local ZxFcg6N8 = BodyPartFrame.BackgroundColor3
+            local qErTy1v3 = ZxFcg6N8 == Color3.fromRGB(200, 200, 200) and Menu.Accent or Color3.fromRGB(200, 200, 200)
+
+            local tween = TweenService:Create(BodyPartFrame, TweenInfo.new(0.5), { BackgroundColor3 = qErTy1v3 })
+            tween:Play()
+
+            BodyPart.Callback(TrfkJ2zX)
+        end)
+
+        return BodyPartFrame
+    end
+
+    local jKurO1qtU = {
+        "Head", "UpperTorso", "LowerTorso", "HumanoidRootPart",
+        "UpperLeftArm", "LowerLeftArm", "UpperRightArm", "LowerRightArm",
+        "UpperLeftLeg", "LowerLeftLeg", "UpperRightLeg", "LowerRightLeg"
+    }
+
+    for _, part in ipairs(jKurO1qtU) do
+        iQerX9Vxz(part)
+    end
+
+    return BodyPart
+end
 
 function Menu.CheckBox(Tab_Name: string, Container_Name: string, Name: string, Boolean: boolean, Callback: any, ToolTip: string): CheckBox
     local Container = GetContainer(Tab_Name, Container_Name)
